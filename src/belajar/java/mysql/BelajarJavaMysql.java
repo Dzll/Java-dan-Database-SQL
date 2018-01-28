@@ -16,7 +16,7 @@ public class BelajarJavaMysql {
     static Statement stmt;
     static ResultSet rs;
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         // Melakukan koneksi ke database
         // harus dibungkus dalam blok try/catch
         try {
@@ -50,6 +50,6 @@ public class BelajarJavaMysql {
             e.printStackTrace();
         }
         
-    }*/
+    }
     
 }

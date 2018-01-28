@@ -1,7 +1,7 @@
 package belajar.java.mysql;
 /**
  * Author By : Wafi Dzulkarnain
- * Dzulkarnain Inc | 2018
+ * Dzulkarnain Inc | 2018git 
  */
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
