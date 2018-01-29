@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 public class ApotekGUI extends JFrame{
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -29,7 +30,7 @@ public class ApotekGUI extends JFrame{
     
     JLabel label = new JLabel("Apotek in Corporation");
     JLabel logo = new JLabel("+");
-    JTextPane text = new JTextPane();
+    JTable text = new JTable();
     
     JLabel idobat = new JLabel("Kode Obat");
     JTextField txid = new JTextField();
@@ -46,6 +47,9 @@ public class ApotekGUI extends JFrame{
     JButton update= new JButton("Update");
     JButton delete = new JButton("Delete");
     JButton c = new JButton("C");
+    
+    private DefaultTableModel model;
+    
     public void insertData() {
         try {
             // ambil input dari user
@@ -63,19 +67,28 @@ public class ApotekGUI extends JFrame{
             e.printStackTrace();
         }
     }
-    public void showData() {
-        String sql = "SELECT * FROM obat";
+    public void showData(){
+        model = new DefaultTableModel();
+        text.setModel(model);
+        model.addColumn("kode");
+        model.addColumn("nama_obat");
+        model.addColumn("harga");
+        
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         try {
+            String sql = "SELECT * FROM obat";
             rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                int kode = rs.getInt("kode");
-                String nama_obat = rs.getString("nama_obat");
-                int harga = rs.getInt("harga");
 
-                text.setText(String.format("%d. %s -- Rp.%d", kode, nama_obat, harga));
-                System.out.println(String.format("%d. %s -- Rp.%d", kode, nama_obat, harga));
+            //penelusuran baris pada tabel tblGaji dari database
+            while(rs.next ()){
+                Object[] obj = new Object[3];
+                obj[0] = rs.getString("kode"); 
+                obj[1] = rs.getString("nama_obat");
+                obj[2] = rs.getString("harga"); 
+
+                model.addRow(obj);
             }
-            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,19 +112,27 @@ public class ApotekGUI extends JFrame{
         }
     }
     public void searchData(){
+        model = new DefaultTableModel();
+        text.setModel(model);
+        model.addColumn("kode");
+        model.addColumn("nama_obat");
+        model.addColumn("harga");
+        
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         try{
             String cr = txsearch.getText();
             String sql = "SELECT * FROM obat WHERE nama_obat = " + "'" + cr + "'";
             rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                int kode = rs.getInt("kode");
-                String nama_obat = rs.getString("nama_obat");
-                int harga = rs.getInt("harga");
+            //penelusuran baris pada tabel tblGaji dari database
+            while(rs.next ()){
+                Object[] obj = new Object[3];
+                obj[0] = rs.getString("kode"); 
+                obj[1] = rs.getString("nama_obat");
+                obj[2] = rs.getString("harga"); 
 
-                text.setText(String.format("%d. %s -- Rp.%d", kode, nama_obat, harga));
-                System.out.println(String.format("%d. %s -- Rp.%d", kode, nama_obat, harga));
+                model.addRow(obj);
             }
-            System.out.println();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -147,13 +168,13 @@ public class ApotekGUI extends JFrame{
         harga.setBounds(20, 210, 100, 30);
         harga.setFont(new Font("Consolas", Font.BOLD,17));
         txharga.setBounds(20, 240, 250, 25);
-        search.setBounds(20, 270, 100, 30);
-        search.setFont(new Font("Consolas", Font.BOLD,17));
-        txsearch.setBounds(20, 300, 250, 25);
-        text.setBounds(290, 90, 570, 340);
+        search.setBounds(290, 85, 100, 30);
+        search.setFont(new Font("Consolas", Font.BOLD,19));
+        txsearch.setBounds(360, 85, 400, 25);
+        text.setBounds(290, 120, 570, 310);
         text.setFont(new Font("Consolas", Font.BOLD,15));
         
-        cari.setBounds(190, 330, 80, 25);
+        cari.setBounds(780, 85, 80, 25);
         cari.setBackground(new Color(20, 180, 255));
         cari.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -185,6 +206,8 @@ public class ApotekGUI extends JFrame{
                     stmt = conn.createStatement();
 
                     insertData();
+                    txnama.setText("");
+                    txharga.setText("");
 
                     stmt.close();
                     conn.close();
@@ -227,6 +250,9 @@ public class ApotekGUI extends JFrame{
                     stmt = conn.createStatement();
 
                     updateData();
+                    txid.setText("");
+                    txnama.setText("");
+                    txharga.setText("");
 
                     stmt.close();
                     conn.close();
@@ -249,6 +275,7 @@ public class ApotekGUI extends JFrame{
                     stmt = conn.createStatement();
 
                     deleteData();
+                    txid.setText("");
 
                     stmt.close();
                     conn.close();
