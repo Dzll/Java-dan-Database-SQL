@@ -122,7 +122,7 @@ public class ApotekGUI extends JFrame{
         model.fireTableDataChanged();
         try{
             String cr = txsearch.getText();
-            String sql = "SELECT * FROM obat WHERE nama_obat = " + "'" + cr + "'";
+            String sql = "SELECT * FROM obat WHERE nama_obat LIKE" + "'%" + cr + "%'";
             rs = stmt.executeQuery(sql);
             //penelusuran baris pada tabel tblGaji dari database
             while(rs.next ()){
@@ -208,6 +208,7 @@ public class ApotekGUI extends JFrame{
                     insertData();
                     txnama.setText("");
                     txharga.setText("");
+                    showData();
 
                     stmt.close();
                     conn.close();
@@ -253,6 +254,7 @@ public class ApotekGUI extends JFrame{
                     txid.setText("");
                     txnama.setText("");
                     txharga.setText("");
+                    showData();
 
                     stmt.close();
                     conn.close();
@@ -276,6 +278,7 @@ public class ApotekGUI extends JFrame{
 
                     deleteData();
                     txid.setText("");
+                    showData();
 
                     stmt.close();
                     conn.close();
